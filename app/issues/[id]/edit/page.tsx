@@ -1,6 +1,6 @@
 import prisma from "@/prisma/client";
 import { notFound } from "next/navigation";
-import IssueForm from "../../components/IsueForm";
+import IssueForm from "../../components/IssueForm";
 
 interface Props {
   params: { id: string };
