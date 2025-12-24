@@ -3,10 +3,10 @@ import prisma from "@/prisma/client";
 import { Box, Flex, Grid } from "@radix-ui/themes";
 import { getServerSession } from "next-auth";
 import { notFound } from "next/navigation";
+import AssigneeSelect from "./AssigneeSelect";
 import DeleteIssueButton from "./DeleteIssueButton";
 import EditlssueButton from "./EditlssueButton";
 import IssueDetails from "./IssueDetails";
-import AssigneeSelect from "./AssigneeSelect";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -30,7 +30,7 @@ const IssueDetailPage = async ({ params }: Props) => {
       {sesion && (
         <Box>
           <Flex direction="column" gap="4">
-            <AssigneeSelect issue={issue}/>
+            <AssigneeSelect issue={issue} />
             <EditlssueButton issueId={issue.id} />
             <DeleteIssueButton issueId={issue.id} />
           </Flex>
@@ -39,5 +39,16 @@ const IssueDetailPage = async ({ params }: Props) => {
     </Grid>
   );
 };
+
+export async function generateMetadata({ params }: Props) {
+  const issue = await prisma.issue.findUnique({
+    where: { id: parseInt((await params).id) },
+  });
+
+  return {
+    title: issue?.title,
+    Description: "Details of issue " + issue?.id,
+  };
+}
 
 export default IssueDetailPage;
